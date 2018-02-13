@@ -62,7 +62,16 @@ if ( $host =~ /^$IPV6_ADDRESS$/ ) {
 	$cc = $ipcc->inet6_atocc($host);
 } else {
 	$cc = $ipcc->inet_atocc($host);
+	# If ipv4 fails retry with ipv6, it could be an ipv6-only host
+	if ( ! defined $cc ) {
+		$cc = $ipcc->inet6_atocc($host);
+	}
 }
 my $country = code2country($cc);
 $dbtime = $ipcc->db_time();
-print "GeoIP version $dbtime: $cc, $country\n";
+# If $cc is "**" the ip address is in private range
+if ( ( ! defined $cc ) or ( $cc = "**" ) ) {
+	print "GeoIP version $dbtime: cannot detect country for host: $host\n";
+} else {
+	print "GeoIP version $dbtime: $cc, $country\n";
+}
