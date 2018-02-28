@@ -70,7 +70,7 @@ if ( $host =~ /^$IPV6_ADDRESS$/ ) {
 my $country = code2country($cc);
 $dbtime = $ipcc->db_time();
 # If $cc is "**" the ip address is in private range
-if ( ( ! defined $cc ) or ( $cc = "**" ) ) {
+if ( ( ! defined $cc ) or ( $cc eq "**" ) ) {
 	print "GeoIP version $dbtime: cannot detect country for host: $host\n";
 } else {
 	print "GeoIP version $dbtime: $cc, $country\n";
