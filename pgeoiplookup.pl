@@ -45,7 +45,7 @@ my $cc;
 
 getopts('f:h', \%opts);
 if ( defined $opts{'h'} || not defined $opts{'f'} ) {
-        print "Usage: pgeoiplokup.pl [ -f database file]\n";
+        print "Usage: pgeoiplokup.pl [ -f database file] ip address\n";
         exit;
 }
 
