@@ -39,24 +39,43 @@ use constant IPV6_ADDRESS => qr/^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:)
 my %opts;
 my $dbfile;
 my $dbtime;
+my $configfile = $ENV{"HOME"} . "/.pgeoiplookup";
 my $IPV6_ADDRESS = IPV6_ADDRESS;
 my $host;
 my $cc;
 
+# read config file
+if ( -f $configfile ) {
+open(my $fh, $configfile) or die "Can't open $configfile: $!";
+while ( ! eof($fh) ) {
+        defined( $_ = <$fh> )
+        or die "readline failed for $configfile: $!";
+        chomp();
+        unless ( /^#/ ) {
+                $dbfile = $_;
+        }
+}
+close($fh);
+}
+
 getopts('f:h', \%opts);
-if ( defined $opts{'h'} || not defined $opts{'f'} ) {
+if ( defined $opts{'h'} or ( ( not defined $opts{'f'} and ( ! -f $configfile) ) ) ) {
         print "Usage: pgeoiplokup.pl [ -f database file] ip address\n";
         exit;
 }
 
-if ( ! -f $opts{'f'} ) {
+if ( ( defined $opts{'f'} ) and (! -f $opts{'f'} ) ) {
 	print "Cannot open database file $opts{'f'}\n";
 	exit;
+} elsif ( ( defined $dbfile ) and (! -f $dbfile ) ) {
+	print "Cannot open database file $dbfile\n";
+	exit;
 } else {
-	$dbfile = $opts{'f'};
+	if ( ( defined $opts{'f'} ) and ( -f $opts{'f'} ) ) {
+		$dbfile = $opts{'f'};
+	}
 	$host = shift;
 }
-
 my $ipcc = IP::Country::DB_File->new($dbfile);
 if ( $host =~ /^$IPV6_ADDRESS$/ ) {
 	$cc = $ipcc->inet6_atocc($host);
