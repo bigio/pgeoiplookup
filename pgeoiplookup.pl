@@ -44,6 +44,11 @@ my $IPV6_ADDRESS = IPV6_ADDRESS;
 my $host;
 my $cc;
 
+sub usage() {
+	print "Usage: pgeoiplokup.pl [ -f database file] ip address\n";
+	exit;
+}
+
 # read config file
 if ( -f $configfile ) {
 open(my $fh, $configfile) or die "Can't open $configfile: $!";
@@ -60,8 +65,7 @@ close($fh);
 
 getopts('f:h', \%opts);
 if ( defined $opts{'h'} or ( ( not defined $opts{'f'} and ( ! -f $configfile) ) ) ) {
-        print "Usage: pgeoiplokup.pl [ -f database file] ip address\n";
-        exit;
+	usage;
 }
 
 if ( ( defined $opts{'f'} ) and (! -f $opts{'f'} ) ) {
@@ -76,6 +80,10 @@ if ( ( defined $opts{'f'} ) and (! -f $opts{'f'} ) ) {
 	}
 	$host = shift;
 }
+if ( not defined $host ) {
+	usage;
+}
+
 my $ipcc = IP::Country::DB_File->new($dbfile);
 if ( $host =~ /^$IPV6_ADDRESS$/ ) {
 	$cc = $ipcc->inet6_atocc($host);
