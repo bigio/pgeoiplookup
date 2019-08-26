@@ -43,6 +43,34 @@ my $IPV6_ADDRESS = IPV6_ADDRESS;
 my $host;
 my $cc;
 
+=head1 NAME
+
+pgeoiplookup - geolocalize an ip address using ipcc.db databases
+
+=head1 SYNOPSIS
+
+B<pgeoiplookup> [-f] [ip_address]
+
+=head1 DESCRIPTION
+
+Tool to geolocalize an ip address using IP::Country::DB_File interface.
+
+The database used is created directly from official ASN data.
+
+=head1 OPTIONS
+
+=over 4
+
+=item -f
+
+Path to the database file, default location is read from
+C<$HOME/.pgeoiplookup> with just the path of the database
+that should be used.
+
+=back
+
+=cut
+
 sub usage() {
 	print "Usage: pgeoiplokup.pl [ -f database file] ip address\n";
 	exit;
