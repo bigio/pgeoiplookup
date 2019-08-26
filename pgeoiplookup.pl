@@ -29,7 +29,6 @@
 use strict;
 use warnings;
 
-use Data::Dumper;
 use Getopt::Std;
 use IP::Country::DB_File;
 use Locale::Country;
