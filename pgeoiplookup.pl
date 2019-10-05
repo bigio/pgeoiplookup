@@ -78,7 +78,7 @@ sub usage() {
 
 # read config file
 if ( -f $configfile ) {
-open(my $fh, $configfile) or die "Can't open $configfile: $!";
+open(my $fh, "<", $configfile) or die "Can't open $configfile: $!";
 while ( ! eof($fh) ) {
         defined( $_ = <$fh> )
         or die "readline failed for $configfile: $!";
